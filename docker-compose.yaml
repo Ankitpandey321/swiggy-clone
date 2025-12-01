@@ -1,9 +1,40 @@
 version: "3.9"
 
 services:
+
   swiggy:
     build: .
-    container_name: swiggy-clone-app
+    container_name: swiggy-frontend
     ports:
       - "8080:80"
-    restart: unless-stopped
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8
+    container_name: swiggy-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: swiggydb
+      MYSQL_USER: ankit
+      MYSQL_PASSWORD: ankit123
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: swiggy-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
