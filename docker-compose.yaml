@@ -13,6 +13,7 @@ services:
   mysql:
     image: mysql:8
     container_name: swiggy-mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: swiggydb
@@ -20,6 +21,7 @@ services:
       MYSQL_PASSWORD: ankit123
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
 
