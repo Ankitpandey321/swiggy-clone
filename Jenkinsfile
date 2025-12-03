@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "swiggy-clone"
         DOCKERHUB_USER = "your-dockerhub-username"
+        DOCKERHUB_PASS = "your-dockerhub-password"   // Hard-coded (not secure)
     }
 
     stages {
@@ -23,12 +24,10 @@ pipeline {
 
         stage('Login and Push') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKERHUB_PASS')]) {
-                    sh '''
-                        echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
-                        docker push $DOCKERHUB_USER/$IMAGE_NAME:latest
-                    '''
-                }
+                sh '''
+                    echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
+                    docker push $DOCKERHUB_USER/$IMAGE_NAME:latest
+                '''
             }
         }
     }
